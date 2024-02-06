@@ -17,8 +17,13 @@ channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
 channel.QueueDeclare(queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 channel.QueueBind(queueName, exchangeName, routingKey, arguments: null);
 
-byte[] messageBodyBytes = Encoding.UTF8.GetBytes(s: "Hello YouTube");
-channel.BasicPublish(exchangeName, routingKey, basicProperties: null, messageBodyBytes);
+for (var i = 0; i < 60; i++)
+{
+    Console.WriteLine(value: $"Sending Message {i}");
+    byte[] messageBodyBytes = Encoding.UTF8.GetBytes(s: $"Message #{i}");
+    channel.BasicPublish(exchangeName, routingKey, basicProperties: null, messageBodyBytes);
+    Thread.Sleep(millisecondsTimeout: 1000);
+}
 
 channel.Close();
 cnn.Close();
